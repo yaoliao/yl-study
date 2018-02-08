@@ -54,7 +54,7 @@ public class StudentRepository implements MongoRepository<MongoStudent> {
         //更新内容
         Document doc = new Document("lastModifyTime", new Date()).append("name", "This is new Name");
 
-        mongoUtil.updateField(STUDENT_COLLECTION,bson,doc);
+        mongoUtil.updateField(STUDENT_COLLECTION, bson, doc);
 
         return var1;
     }
@@ -67,6 +67,6 @@ public class StudentRepository implements MongoRepository<MongoStudent> {
      */
     @Override
     public Long count(Bson bson) {
-        return null;
+        return mongoUtil.count(STUDENT_COLLECTION, bson);
     }
 }
