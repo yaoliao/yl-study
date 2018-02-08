@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:solr="http://www.springframework.org/schema/data/solr"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/solr http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+
+    <solr:solr-client id="solrClient" url="${solr.url}"/>
+    <solr:repositories base-package="com.yl.study.solr.repository" solr-client-ref="solrClient"
+                       solr-template-ref="solrTemplate" multicore-support="true"/>
+
+    <bean id="solrClientFactory" class="org.springframework.data.solr.server.support.MulticoreSolrClientFactory">
+        <constructor-arg index="0" ref="solrClient"/>
+        <constructor-arg index="1">
+            <list>
+                <!--<value>appCarSearch</value>-->
+                <!--<value>carBrandAndModel</value>-->
+                <!--<value>appStoreSearch</value>-->
+                <!--<value>clues</value>-->
+                <!--<value>privateCarSearch</value>-->
+                <value>collection1</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
+        <constructor-arg index="0" ref="solrClientFactory"/>
+    </bean>
+
+    <!-- 分词器 -->
+    <bean id="queryAnalyzer" class="com.yl.study.solr.analyzer.IkQueryAnalyzer"/>
+
+</beans>

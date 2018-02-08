@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- 数据源配置, 使用DBCP数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 数据库连接基本配置 -->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- 连接池基本配置 -->
+        <!-- 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时 -->
+        <property name="initialSize" value="${db.pool.initialSize}"/>
+        <!-- 最小连接池数量 -->
+        <property name="minIdle" value="${db.pool.minIdle}"/>
+        <!-- 最大连接池数量,默认:8 -->
+        <property name="maxActive" value="${db.pool.maxActive}"/>
+
+        <!-- PreparedStatement缓存配置 -->
+        <!-- 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。默认：false -->
+        <property name="poolPreparedStatements" value="${db.pool.cache.poolPreparedStatements}"/>
+        <!-- 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100,默认：－1 -->
+        <property name="maxOpenPreparedStatements" value="${db.pool.cache.maxOpenPreparedStatements}"/>
+
+        <!-- 验证SQL相关 -->
+        <!-- 用来检测连接是否有效的sql，要求是一个查询语句。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会其作用。 -->
+        <property name="validationQuery" value="${db.pool.validate.validationQuery}"/>
+        <!-- 单位：秒，检测连接是否有效的超时时间。底层调用jdbc Statement对象的void setQueryTimeout(int seconds)方法 -->
+        <property name="validationQueryTimeout" value="${db.pool.validate.validationQueryTimeout}"/>
+        <!-- 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。 默认：true -->
+        <property name="testOnBorrow" value="${db.pool.validate.testOnBorrow}"/>
+        <!-- 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。 默认：false -->
+        <property name="testOnReturn" value="${db.pool.validate.testOnReturn}"/>
+        <!-- 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。默认：true -->
+        <property name="testWhileIdle" value="${db.pool.validate.testWhileIdle}"/>
+
+        <!-- 超时配置 -->
+        <!-- 配置获取连接等待超时的时间，单位是毫秒 -->
+        <property name="maxWait" value="${db.pool.timeout.maxWait}"/>
+        <!--
+            间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+            有两个含义：
+            1) Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接
+            2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
+            默认：60 ＊ 1000毫秒
+         -->
+        <property name="timeBetweenEvictionRunsMillis" value="${db.pool.timeout.timeBetweenEvictionRunsMillis}"/>
+        <!-- 连接保持空闲而不被驱逐的最长时间，单位是毫秒，默认：30 ＊ 60 ＊ 1000毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${db.pool.timeout.minEvictableIdleTimeMillis}"/>
+
+        <!-- 过滤器配置 -->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="druidLogFilter"/>
+                <ref bean="stat-filter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="druidLogFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="resultSetLogEnabled" value="true"/>
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+    </bean>
+
+    <!-- druid监控统计bean 对应上文dataSource中的proxyFilters -->
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="1000" />
+        <property name="logSlowSql" value="true" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--Mybatis配置-->
+    <bean id="mybatisSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation">
+            <value>classpath:mybatisConfig.xml</value>
+        </property>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:com/yl/study/**/mapper/*.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yl.study.**.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="mybatisSqlSessionFactory"/>
+    </bean>
+
+
+</beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="com.yl.study.event.rocketmq.config.EventManagementConfig">
+		<property name="applicationName" value="${event.application.name}"/>
+		<property name="rocketMQNameSvrAddress" value="${rocketmq.namesrv.address}"/>
+		<property name="reconsumeTimes" value="${rocketmq.reconsumeTimes}"/>
+	</bean>
+
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- Dubbo配置 -->
+	<dubbo:application name="yl-business-center" logger="${dubbo.application.logger}"/>
+	<!-- 通过 广播通知所有人-->
+	<dubbo:registry address="${registry.address}" protocol="${registry.protocol}" />
+	<dubbo:protocol name="${protocol.name}" port="${protocol.port}" threads="500"/>
+	<dubbo:provider filter="-exception"/>
+
+	<dubbo:service interface="com.yl.study.domain.StudentDomain" version="1.0.0.0" ref="studentDomain" validation="false" timeout="5000" retries="0"/>
+
+	<dubbo:service interface="com.yl.study.solr.domain.StudentSolrDomain" version="1.0.0.0" ref="studentSolrDomain" validation="false" timeout="5000" retries="0"/>
+
+	<dubbo:service interface="com.yl.study.domain.EventDefineDomain" version="1.0.0.0" ref="eventDefineDomain" validation="false" timeout="5000" retries="0"/>
+
+	<!--<dubbo:reference id="mytest" interface="com.yl.business.test.domain.TestDomain" version="1.0.0.0" check="false"/>-->
+
+</beans>

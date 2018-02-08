@@ -1,0 +1,3 @@
+com.yl.common.utils.serialize.kryo.KryoSerializer
+com.yl.common.utils.serialize.fastjson.FastJsonSerializer
+com.yl.common.utils.serialize.protostuff.ProtostuffSerializer
