@@ -82,7 +82,8 @@ public class StudentRepository implements MongoRepository<MongoStudent> {
     public List<AggregationBean> find() {
 
         // $match 管道符
-        Document match = new Document("$match", new Document("age", 22));
+//        Document match = new Document("$match", new Document("age", 22));
+        Document match = new Document("$match", new Document("age", new Document("$gt", 22).append("$lt", 28)));
         Document group = new Document("$group", new Document("_id",
                 //已 name 和 age分组
                 new Document("name", "$name")
