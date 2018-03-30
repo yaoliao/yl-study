@@ -1,13 +1,17 @@
 package com.yl.study.example13;
 
 import com.lmax.disruptor.BlockingWaitStrategy;
+import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -21,7 +25,7 @@ public class Main {
 
         ExecutorService executor = Executors.newCachedThreadPool();
         PCDataFactory pcDataFactory = new PCDataFactory();
-        int bufferSize = 1024 * 1024;
+        int bufferSize = 8;
         //创建disruptor, 泛型参数:传递的事件的类型
         // 第一个参数: 产生Event的工厂类, Event封装生成-消费的数据
         // 第二个参数: RingBuffer的缓冲区大小
@@ -34,19 +38,41 @@ public class Main {
         //BusySpinWaitStrategy 自旋等待，类似自旋锁. 低延迟但同时对CPU资源的占用也多.
         Disruptor<PCData> disruptor = new Disruptor<>(pcDataFactory, bufferSize, executor, ProducerType.MULTI, new BlockingWaitStrategy());
 
-        disruptor.handleEventsWithWorkerPool(new Consumer(), new Consumer(), new Consumer());
+//        disruptor.handleEventsWithWorkerPool(new Consumer("aa"), new Consumer("bb"), new Consumer("cc"));
+//        disruptor.handleEventsWithWorkerPool(new Consumer("aa"));
+        disruptor.handleEventsWith(new EventHandler<PCData>() {
+            final ExecutorService executor = new ThreadPoolExecutor(10, 100,
+                    60L, TimeUnit.SECONDS,
+                    new ArrayBlockingQueue<Runnable>(100));
+            @Override
+            public void onEvent(PCData event, long sequence, boolean endOfBatch) throws Exception {
+                System.out.println(event.getValue());
+                executor.execute(() -> {
+//                    TimeUnit.MILLISECONDS.sleep(100);
+                    System.out.println(event.getValue() + "==================" + Thread.currentThread().getId());
+                });
+            }
+        });
+
+
         disruptor.start();
 
         RingBuffer<PCData> ringBuffer = disruptor.getRingBuffer();
         Producer producer = new Producer(ringBuffer);
+        Producer producer1 = new Producer(ringBuffer);
         ByteBuffer buffer = ByteBuffer.allocate(8);
+
         for (long i = 0L; true; i++) {
             buffer.putLong(0, i);
             producer.pushData(buffer);
             System.out.println("pushData : " + i);
-            TimeUnit.MILLISECONDS.sleep(3000);
-
+//            TimeUnit.MILLISECONDS.sleep(1000);
+            if(i == 20){
+                break;
+            }
         }
+
+
 
     }
 
