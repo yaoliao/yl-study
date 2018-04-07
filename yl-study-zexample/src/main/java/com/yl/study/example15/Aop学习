@@ -1,0 +1,18 @@
+
+Aop学习
+
+	1、 Advice:通知    定义在连接点具体做什么。 例如 beforAdvice afterAdvice等
+	2、 Pointcut:切点  决定advice通知应该作用于哪个连接点。 JdkRegexpMethodPointcut:根据正则对方法名匹配
+															NameMatchMethodPointcut:根据方法名去匹配
+	3、 Advisor:通知器  用来将Advice和Pointcut链接起来，即用来定义该使用哪个通知并在哪个切点使用。 DefaultPointcutAdvisor
+
+
+    利用动态代理,生成代理类。在调用时调用JdkDynamicAopProxy#invoke 或 CglibAopProxy#intercept方法,
+    在这些方法中用List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass); 获取aop的
+    拦截器链，然后创建ReflectiveMethodInvocation的实例 并调用 proceed()方法 。
+
+    在proceed方法中会逐一获取interceptorsAndDynamicMethodMatchers中的advisor(通知)并调用(在这些通知调用的时候又会去执行proceed方法，
+    以此来产生循环调用的效果)
+
+    ReflectiveMethodInvocation(是多例？？) 中 interceptorsAndDynamicMethodMatchers 用来保存aop的拦截器链(是List所以有调用顺序，
+    可以用@Order注解来改变顺序)

@@ -43,7 +43,7 @@
 
     <bean id="methodInterceptor" class="com.yl.study.aop.MyAnnotationAop"/>
 
-    <!-- 方法拦截器（拦截domain包中的所有被ToJson注解的方法） MethodInterceptor -->
+    <!-- 方法拦截器（拦截domain包中的所有被ToJson注解的方法） MethodInterceptor    proxy-target-class="true" 这个注解会强制使用CGLIB -->
     <aop:config proxy-target-class="true">
         <aop:pointcut id="controllerMethodPointcut" expression="execution(public * com.yl.study..*.*(..)) and
         @annotation(com.yl.study.annotation.ToJson)"/>

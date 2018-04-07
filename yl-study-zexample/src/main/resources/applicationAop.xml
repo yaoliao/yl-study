@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <aop:aspectj-autoproxy/>
+
+    <bean id="methodInterceptor1" class="com.yl.study.example15.MyInterceptor1"/>
+    <bean id="methodInterceptor2" class="com.yl.study.example15.MyInterceptor2"/>
+    <bean id="aopTest" class="com.yl.study.example15.service.AopTest"/>
+
+    <!-- 方法拦截器（拦截domain包中的所有被ToJson注解的方法） MethodInterceptor    proxy-target-class="true" 这个注解会强制使用CGLIB -->
+    <!--<aop:config proxy-target-class="false">
+        <aop:pointcut id="methodPointcut1" expression="execution(public * com.yl.study.example15..*.*(..))"/>
+        &lt;!&ndash;<aop:advisor advice-ref="methodInterceptor" pointcut-ref="controllerMethodPointcut"/>&ndash;&gt;
+        <aop:aspect id="aspect1" ref="methodInterceptor">
+            <aop:before method="before"  pointcut-ref="methodPointcut1" />
+            <aop:after method="after"  pointcut-ref="methodPointcut1" />
+            <aop:around method="around"  pointcut-ref="methodPointcut1" />
+            <aop:after-returning method="afterReturning"  pointcut-ref="methodPointcut1" />
+        </aop:aspect>
+    </aop:config>-->
+
+</beans>
