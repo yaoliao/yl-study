@@ -16,3 +16,19 @@ Aop学习
 
     ReflectiveMethodInvocation(是多例？？) 中 interceptorsAndDynamicMethodMatchers 用来保存aop的拦截器链(是List所以有调用顺序，
     可以用@Order注解来改变顺序)
+
+
+    解析Aop标签：
+        由AopNamespaceHandler类来完成，ConfigBeanDefinitionParser类用来解析<aop:config>标签
+        ConfigBeanDefinitionParser#parse中的configureAutoProxyCreator方法会生成AspectJAwareAdvisorAutoProxyCreator类型的BeanDefinition
+
+        在AspectJAwareAdvisorAutoProxyCreator类的父类AbstractAutoProxyCreator实现了BeanPostProcessor类的postProcessBeforeInstantiation方法
+        会在bean初始化时生成代理类并返回
+
+
+    spring 处理事物的几个核心类：
+        TransactionProxyFactoryBean
+        AbstractSingletonProxyFactoryBean  afterPropertiesSet()
+        TransactionInterceptor  invoke()
+        TransactionAspectSupport  invokeWithinTransaction()
+        AbstractPlatformTransactionManager  commit()  rollback()
