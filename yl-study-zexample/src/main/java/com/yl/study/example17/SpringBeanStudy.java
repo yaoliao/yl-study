@@ -19,17 +19,35 @@ public class SpringBeanStudy {
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationAop.xml");
 
-        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
+//        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
+//
+//        RootBeanDefinition beanDefinition = new RootBeanDefinition();
+//        beanDefinition.setBeanClass(MyTestBean.class);
+//
+//        beanFactory.registerBeanDefinition(MyTestBean.class.getName(), beanDefinition);
 
-        RootBeanDefinition beanDefinition = new RootBeanDefinition();
-        beanDefinition.setBeanClass(MyTestBean.class);
 
-        beanFactory.registerBeanDefinition(MyTestBean.class.getName(), beanDefinition);
+        MyTestBean bean = context.getBean("myTestBean", MyTestBean.class);
 
 
-        MyTestBean bean = context.getBean(MyTestBean.class.getName(), MyTestBean.class);
-        bean.setName("abc");
+        CompilerBuilder compilerBuilder = new CompilerBuilder();
+        MyBeanInterface myBeanInterface = null;
+        try {
+            myBeanInterface = (MyBeanInterface) compilerBuilder.toBuilder().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        bean.setMyBeanInterface(myBeanInterface);
         bean.say("defg");
+
+        MyBeanInterface myBeanInterface1 = bean.getMyBeanInterface();
+        myBeanInterface1.say("");
+
+
+        MyTestBean bean1 = context.getBean("myTestBean", MyTestBean.class);
+        MyBeanInterface myBeanInterface2 = bean.getMyBeanInterface();
+        myBeanInterface2.say("");
     }
 
 }

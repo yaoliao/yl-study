@@ -5,6 +5,8 @@ package com.yl.study.example17;
  */
 public class MyTestBean {
 
+    private MyBeanInterface myBeanInterface;
+
     private String name;
 
     public void say(String name) {
@@ -17,5 +19,13 @@ public class MyTestBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public MyBeanInterface getMyBeanInterface() {
+        return myBeanInterface;
+    }
+
+    public void setMyBeanInterface(MyBeanInterface myBeanInterface) {
+        this.myBeanInterface = myBeanInterface;
     }
 }
