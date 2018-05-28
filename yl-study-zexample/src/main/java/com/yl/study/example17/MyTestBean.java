@@ -6,9 +6,10 @@ package com.yl.study.example17;
 public class MyTestBean {
 
     private String name;
+    private Integer age;
 
-    public void say(String name) {
-        System.out.println(name + " oldName : " + this.name);
+    public void say() {
+        System.out.println(name + "  : " + age);
     }
 
     public String getName() {
@@ -17,5 +18,13 @@ public class MyTestBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }

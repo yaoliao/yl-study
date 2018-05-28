@@ -1,5 +1,6 @@
 package com.yl.study.example17;
 
+import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,12 +25,15 @@ public class SpringBeanStudy {
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
         beanDefinition.setBeanClass(MyTestBean.class);
 
+//        beanDefinition.getPropertyValues().addPropertyValue("id","AAAA");
+        beanDefinition.getPropertyValues().addPropertyValue("name","Jack");
+        beanDefinition.getPropertyValues().addPropertyValue("age","22");
+
         beanFactory.registerBeanDefinition(MyTestBean.class.getName(), beanDefinition);
 
 
         MyTestBean bean = context.getBean(MyTestBean.class.getName(), MyTestBean.class);
-        bean.setName("abc");
-        bean.say("defg");
+        bean.say();
     }
 
 }
