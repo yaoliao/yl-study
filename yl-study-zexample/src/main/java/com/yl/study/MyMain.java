@@ -1,7 +1,10 @@
 package com.yl.study;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author DELL
@@ -22,6 +25,12 @@ public class MyMain {
         String ee = map.get("ee");
 
         map.forEach((k, v) -> System.out.println(k + " --- " + v));
+
+
+        Map<String, List<String>> collect = Stream.of("tom", "jack", "tom", "rose").collect(Collectors.groupingBy(val -> val));
+        System.out.println(collect);
+        Map<String, Long> collect1 = Stream.of("tom", "jack", "tom", "rose").collect(Collectors.groupingBy(val -> val, Collectors.counting()));
+        System.out.println(collect1);
 
     }
 
