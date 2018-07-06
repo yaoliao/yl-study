@@ -5,11 +5,12 @@ package com.yl.study.example17;
  */
 public class MyTestBean {
 
-    private String name;
-    private Integer age;
+    private MyBeanInterface myBeanInterface;
 
-    public void say() {
-        System.out.println(name + "  : " + age);
+    private String name;
+
+    public void say(String name) {
+        System.out.println(name + " oldName : " + this.name);
     }
 
     public String getName() {
@@ -20,11 +21,11 @@ public class MyTestBean {
         this.name = name;
     }
 
-    public Integer getAge() {
-        return age;
+    public MyBeanInterface getMyBeanInterface() {
+        return myBeanInterface;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setMyBeanInterface(MyBeanInterface myBeanInterface) {
+        this.myBeanInterface = myBeanInterface;
     }
 }
