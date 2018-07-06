@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +16,7 @@ public class LambdaStudy {
 
     public static void main(String[] args) {
 
-        /*ThreadLocal<SimpleDateFormat> threadLocal = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd-MMM-yyyy"));
+        ThreadLocal<SimpleDateFormat> threadLocal = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd-MMM-yyyy"));
 
         ThreadLocal<SimpleDateFormat> threadLocal1 = new ThreadLocal<SimpleDateFormat>() {
             @Override
@@ -45,12 +46,12 @@ public class LambdaStudy {
 
 
         List<String> list1 = Arrays.asList("ertf", "sd", "dfs", "a", "wee");
-        Collections.sort(list1, Comparator.comparingInt(String::length));
+        list1.sort(Comparator.comparingInt(String::length).reversed());
         list1.forEach(System.out::println);
 
 
         String s = list1.stream().mapToInt(String::length).summaryStatistics().toString();
-        String s1 = list1.stream().mapToInt(value -> value.length()).summaryStatistics().toString();
+        String s1 = list1.stream().mapToInt(String::length).summaryStatistics().toString();
         System.out.println(s);
 
         String collect = list1.stream().collect(Collectors.joining(",", "[", "]"));
@@ -64,8 +65,8 @@ public class LambdaStudy {
         System.out.println("===============");
         List<Album> albums = Arrays.asList(new Album("yesterday_专辑1", new Artist("保罗", 23)), new Album("yesterday_专辑2", new Artist("保罗", 23)),
                 new Album("comeTogether_专辑1", new Artist("约翰列侬", 22)));
-        *//*Stream<Album> albumStream = Stream.of(new Album("yesterday_专辑1", new Artist("保罗", 23)), new Album("yesterday_专辑2", new Artist("保罗", 23)),
-                new Album("comeTogether_专辑1", new Artist("约翰列侬", 22)));*//*
+        /*Stream<Album> albumStream = Stream.of(new Album("yesterday_专辑1", new Artist("保罗", 23)), new Album("yesterday_专辑2", new Artist("保罗", 23)),
+                new Album("comeTogether_专辑1", new Artist("约翰列侬", 22)));*/
 
         Map<Artist, List<Album>> collect2 = albums.stream().collect(Collectors.groupingBy(Album::getMainMusician));
         String s2 = JSON.toJSONString(collect2);
@@ -82,9 +83,7 @@ public class LambdaStudy {
         String string = joiner.add("aa").add("bb").toString();
 
 
-        List<String> collect6 = albums.parallelStream().map(Album::getMainMusician).map(Artist::getName).collect(Collectors.toList());*/
-
-
+        List<String> collect6 = albums.parallelStream().map(Album::getMainMusician).map(Artist::getName).collect(Collectors.toList());
 
 
         Map<String, String> map = new HashMap<>();
@@ -100,11 +99,35 @@ public class LambdaStudy {
         System.out.println(treeMap);
 
 
-//        Map<String, String> map = new HashMap<>();
-//        map.putIfAbsent("","");
-//        map.computeIfAbsent()
+        List<String> list2 = new ArrayList<>();
+
+        Consumer<String> consumer = val -> list2.add("a");
+
+        List<String> collect7 = albums.parallelStream().map(Album::getMainMusician).map(Artist::getName)
+                .peek(System.out::println)
+                .collect(Collectors.toList()); // peek
 
 
+        List<String> collect8 = Stream.of("aa", "bb", "cc", "aa").distinct().collect(Collectors.toList()); //distinct
+        System.out.println(collect8);
+
+
+        List<Integer> integers1 = Arrays.asList(1, 2, 3);
+        List<Integer> integers2 = Arrays.asList(3, 4);
+        List<int[]> collect9 = integers1.stream()
+                .flatMap(i -> integers2.stream().map(j -> new int[]{i, j}))
+                .collect(Collectors.toList());
+
+        System.out.println(JSON.toJSONString(collect9));
+
+
+        boolean b = integers1.stream().anyMatch(e -> Integer.valueOf(1).equals(e));
+        boolean c = integers1.stream().noneMatch(e -> Integer.valueOf(1).equals(e));
+        System.out.println(b);
+        System.out.println(c);
+
+
+        System.exit(0);
 
     }
 
