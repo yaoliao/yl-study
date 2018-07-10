@@ -30,7 +30,7 @@ public class SpringBeanStudy {
         MyTestBean bean = context.getBean("myTestBean", MyTestBean.class);
 
 
-        CompilerBuilder compilerBuilder = new CompilerBuilder();
+        /*CompilerBuilder compilerBuilder = new CompilerBuilder();
         MyBeanInterface myBeanInterface = null;
         try {
             myBeanInterface = (MyBeanInterface) compilerBuilder.toBuilder().newInstance();
@@ -47,7 +47,7 @@ public class SpringBeanStudy {
 
         MyTestBean bean1 = context.getBean("myTestBean", MyTestBean.class);
         MyBeanInterface myBeanInterface2 = bean.getMyBeanInterface();
-        myBeanInterface2.say("");
+        myBeanInterface2.say("");*/
     }
 
 }
