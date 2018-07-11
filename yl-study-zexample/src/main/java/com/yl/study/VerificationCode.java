@@ -28,17 +28,6 @@ public class VerificationCode {
         System.out.println("OCR Result: \n" + ocrResult + "\n 耗时：" + (System.currentTimeMillis() - startTime) + "ms");
 
 
-        /*File imageFile = new File("D:/validcode.jpg");
-        Tesseract tessreact = new Tesseract();
-        tessreact.setDatapath("C:/tessdata");
-        try {
-            String result = tessreact.doOCR(imageFile);
-            System.out.println(result);
-        } catch (TesseractException e) {
-            System.err.println(e.getMessage());
-        }*/
-
-
     }
 
 
