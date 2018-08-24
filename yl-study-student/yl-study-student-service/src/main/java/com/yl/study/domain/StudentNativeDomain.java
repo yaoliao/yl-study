@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.yl.common.utils.BeanUtil;
 import com.yl.study.annotation.ToJson;
 import com.yl.study.bo.StudentBo;
+import com.yl.study.cache.Cache;
 import com.yl.study.cache.CacheTemplateService;
 import com.yl.study.cache.StudentCache;
 import com.yl.study.event.EventConfig;
@@ -76,6 +77,14 @@ public class StudentNativeDomain implements StudentDomain {
 
         List<Student> students = cacheTemplateService.findDataTemplate("student_age_" + age, EXPIRATION_TIME, new TypeReference<List<Student>>() {
         }, () -> studentService.findByAge(age));
+
+
+        cacheTemplateService.findDataTemplate1("student_age_" + age, EXPIRATION_TIME, new Cache<List<Student>>() {
+            @Override
+            public List<Student> load() {
+                return studentService.findByAge(age);
+            }
+        });
 
         return BeanUtil.convertList(students, StudentBo.class);
     }
