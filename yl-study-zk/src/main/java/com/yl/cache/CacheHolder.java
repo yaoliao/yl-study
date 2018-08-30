@@ -20,7 +20,7 @@ public class CacheHolder {
     }
 
     public static void put(String key, String value) {
-        map.put(key, value);
+        map.putIfAbsent(key, value);
     }
 
     public static String get(String key) {
