@@ -87,4 +87,8 @@ public class Timer {
 
     }
 
+    public void aa(String[] args, Integer a) {
+
+    }
+
 }
