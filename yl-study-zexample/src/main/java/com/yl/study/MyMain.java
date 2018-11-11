@@ -17,7 +17,7 @@ public class MyMain {
 
     public static void main(String[] args) {
 
-        Map<String, String> map = new LinkedHashMap<>(8);
+       /* Map<String, String> map = new LinkedHashMap<>(8);
 
         map.put("aa", "11");
         map.put("bb", "22");
@@ -37,9 +37,9 @@ public class MyMain {
         System.out.println(Integer.toBinaryString(2147483647));
 
 
-        /**
+        *//**
          * 利用zookeeper实现的分布式锁，强啊
-         */
+         *//*
         CuratorFramework client = CuratorFrameworkFactory.builder().connectString("").connectionTimeoutMs(5000).build();
         InterProcessMutex lock = new InterProcessMutex(client, "/InterProcessLock");
 
@@ -53,14 +53,14 @@ public class MyMain {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
-        /*List<T> ts = Arrays.asList(new T("a", 2), new T("1", 1), new T("b", 2), new T("a", 1), new T("1", 2), new T("b", 1));
+        List<T> ts = Arrays.asList(new T("a", 2), new T("1", 1), new T("b", 2), new T("a", 1), new T("1", 2), new T("b", 1));
         List<T> collect = ts.stream().sorted(Comparator.comparing(T::getA).thenComparing(Comparator.comparing(T::getB))).collect(Collectors.toList());
         System.out.println(collect);
 
         List<T> collect1 = ts.stream().sorted(Comparator.comparing(T::getA).thenComparing(Comparator.comparing(T::getB).reversed())).collect(Collectors.toList());
-        System.out.println(collect1);*/
+        System.out.println(collect1);
 
         /*T a = new T("a", 1);
         Optional<String> s = Optional.ofNullable(a).map(T::getA);
@@ -68,7 +68,7 @@ public class MyMain {
         Optional<String> s1 = Optional.ofNullable(a).flatMap(T::getOps);
         s1.orElseGet("tTTtt"::toLowerCase);*/
 
-        T t = new T(null, 12);
+        /*T t = new T(null, 12);
         T tt = new T("afrdFDH", 12);
 
         String s3 = Optional.ofNullable(t).map(T::getA).map(String::toUpperCase).orElse("这是null。。。。。。");
@@ -78,7 +78,7 @@ public class MyMain {
         s.map(String::toUpperCase).ifPresent(e -> System.out.println(e.toUpperCase()));
 
         String t1 = Optional.ofNullable(t).map(T::getA).filter(Objects::nonNull).orElse("空");
-        System.out.println(t1);
+        System.out.println(t1);*/
     }
 
     static class T {
