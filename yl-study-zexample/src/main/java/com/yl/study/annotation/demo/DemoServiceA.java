@@ -1,9 +1,7 @@
 package com.yl.study.annotation.demo;
 
 import com.yl.study.annotation.MyScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * @author yaoliao
@@ -17,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class DemoServiceA {
 
     //@Autowired
-    @MyScan
+    @MyScan(value = "拿到了，拿到了------------")
     private DemoServiceB demoServiceB;
 
     public void call() {

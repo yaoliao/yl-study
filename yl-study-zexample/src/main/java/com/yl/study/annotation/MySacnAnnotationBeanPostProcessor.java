@@ -1,7 +1,5 @@
 package com.yl.study.annotation;
 
-import com.sun.org.apache.regexp.internal.RE;
-import com.yl.study.annotation.demo.DemoServiceB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -22,7 +20,6 @@ import org.springframework.util.StringUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
@@ -124,14 +121,18 @@ public class MySacnAnnotationBeanPostProcessor extends InstantiationAwareBeanPos
         }
 
         @Override
-        protected void inject(Object target, String requestingBeanName, PropertyValues pvs) throws Throwable {
-            //super.inject(target, requestingBeanName, pvs);
-            Class<?> type = field.getType();
-            Object proxy = MyInvocationHandler.getProxy(type, myScan);
-            ((DemoServiceB)proxy).call();
-            System.out.println("=============");
+        protected void inject(Object bean, String requestingBeanName, PropertyValues pvs) throws Throwable {
+
+            /*DemoService demoServiceB = new DemoServiceB();
+            DemoService proxy = MyInvocationHandlerV2.getProxy(demoServiceB);
             ReflectionUtils.makeAccessible(field);
-            field.set(target, proxy);
+            field.set(bean, proxy);*/
+
+            Class<?> type = field.getType();
+            Object o = type.newInstance();
+            Object proxy = CglibProxy.getProxy(o, myScan);
+            ReflectionUtils.makeAccessible(field);
+            field.set(bean, proxy);
         }
     }
 

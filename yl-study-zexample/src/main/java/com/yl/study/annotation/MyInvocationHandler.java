@@ -29,30 +29,31 @@ public class MyInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Object o = clazz.newInstance();
         String methodName = method.getName();
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (method.getDeclaringClass() == Object.class) {
-            return method.invoke(proxy, args);
+            return method.invoke(o, args);
         }
         if ("toString".equals(methodName) && parameterTypes.length == 0) {
-            return proxy.toString();
+            return o.toString();
         }
         if ("hashCode".equals(methodName) && parameterTypes.length == 0) {
-            return proxy.hashCode();
+            return o.hashCode();
         }
         if ("equals".equals(methodName) && parameterTypes.length == 1) {
-            return proxy.equals(args[0]);
+            return o.equals(args[0]);
         }
         String value = myScan.value();
         String name = method.getName();
         System.out.println(name);
         System.out.println("-------------------------  MyScan:  " + value + "  -----------------------");
-        return method.invoke(proxy, args);
+        return method.invoke(o, args);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getProxy(Class<T> clazz, MyScan myScan) {
-        T t = (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class<?>[]{DemoService.class}, new MyInvocationHandler(clazz, myScan));
+    public static Object getProxy(Class<?> clazz, MyScan myScan) {
+        Object t = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), clazz.getInterfaces(), new MyInvocationHandler(clazz, myScan));
         return t;
     }
 
@@ -84,7 +85,7 @@ public class MyInvocationHandler implements InvocationHandler {
                 return "ccccccccc";
             }
         };
-        DemoServiceB proxy = MyInvocationHandler.getProxy(DemoServiceB.class, myScan);
-        proxy.call();
+//        DemoServiceB proxy = MyInvocationHandler.getProxy(DemoServiceB.class, myScan);
+//        proxy.call();
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @describe 版本描述：
  * @modifyLog 修改日志：
  */
-@Component
+//@Component
 public class DemoServiceB implements DemoService {
 
 
